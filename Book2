@@ -1,0 +1,89 @@
+import java.util.*;
+import java.io.*;
+
+public class Book{
+
+    public List<Contact> book = new ArrayList<Contact>();
+    public String name;
+
+    // Either we build a book from a file or we build a new one from scratch.
+    public Book(Scanner input){
+        while(input.hasNextLine()){
+        	String[] info = input.nextLine().split(",");
+        	addContact(info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7]);
+    	}
+    }
+    
+    //When constructing a new book, give it a name
+    public Book(String name){
+        this.name = name;
+        
+    }
+
+    public void addContact(String First_Name, String Last_Name, String Address, String
+							City, String State, String Zip, String Number, String Email){
+
+		book.add(new Contact( First_Name,Last_Name,Address,
+					City,State,Zip,Number,Email));
+	}
+
+public boolean deleteContact(String First_Name, String Last_Name){
+    for(int i = 0; i != book.size(); i++){
+        if(First_Name.equalsIgnoreCase(book.get(i).First_Name)){
+            if(Last_Name.equalsIgnoreCase(book.get(i).Last_Name)){
+              book.remove(i);
+                 ((ArrayList)book).trimToSize();
+                 return true;
+                }
+        	}else{
+        		continue;
+        	}
+    	}
+    	return false;
+	}
+	
+	public void printBook(){
+		Contact info; 
+		for(int i = 0; i < book.size(); i++){
+			info = book.get(i);
+			System.out.println(info.First_Name + ", " + info.Last_Name + ", " + info.Address + ", " + info.City + ", " + info.State + ", " + info.Zip + ", " + info.Number + ", " + info.Email);
+			}
+	}
+
+// Can edit expect all of this information?
+    public void editContact(Contact contact, String First_Name, String Last_Name, String Address, String City,
+            String State, String Zip, String Number, String Email){
+    	
+    	contact.makeChanges(First_Name, Last_Name, Address, City, State, Zip, Number, Email);
+    	
+    }
+
+
+
+    class NameComparator implements Comparator<Contact>{
+           public int compare(Contact a, Contact b){
+               return a.Last_Name.compareTo(b.Last_Name);
+           }
+       }
+       
+    // TODO ties broken by last name
+    class ZipComparator implements Comparator<Contact>{
+    	public int compare(Contact a, Contact b){
+    		if(Integer.parseInt(a.Zip) == Integer.parseInt(b.Zip)){
+    			return a.Last_Name.compareTo(b.Last_Name);
+    		}else{
+    			return Integer.parseInt(a.Zip) - Integer.parseInt(b.Zip); 
+            }
+        }
+    }
+
+    public void SortByName(){
+        Collections.sort(book, new NameComparator());
+    }
+
+    public void SortByZip(){
+        Collections.sort(book, new ZipComparator());
+    }
+}
+
+
