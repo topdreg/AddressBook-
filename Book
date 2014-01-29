@@ -1,89 +1,86 @@
 import java.util.*;
-import java.io.*;
-
+/**
+*
+* @author Intergalactic Overlords, University of Oregon, 2014
+*
+*/
 public class Book{
 
-    public List<Contact> book = new ArrayList<Contact>();
-    public String name;
+	public List<Contact> book = new ArrayList<Contact>();
+	public String name;
 
-    // Either we build a book from a file or we build a new one from scratch.
-    public Book(Scanner input){
-        while(input.hasNextLine()){
+	//populate book from file
+	public Book(Scanner input){
+    	while(input.hasNextLine()){
         	String[] info = input.nextLine().split(",");
-        	addContact(info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7]);
+        	addContact(info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7], info[8]);
     	}
-    }
-    
-    //When constructing a new book, give it a name
-    public Book(String name){
-        this.name = name;
-        
-    }
-
-    public void addContact(String First_Name, String Last_Name, String Address, String
-							City, String State, String Zip, String Number, String Email){
-
-		book.add(new Contact( First_Name,Last_Name,Address,
-					City,State,Zip,Number,Email));
+input.close();
 	}
-
-public boolean deleteContact(String First_Name, String Last_Name){
-    for(int i = 0; i != book.size(); i++){
-        if(First_Name.equalsIgnoreCase(book.get(i).First_Name)){
-            if(Last_Name.equalsIgnoreCase(book.get(i).Last_Name)){
-              book.remove(i);
-                 ((ArrayList)book).trimToSize();
-                 return true;
-                }
+    
+	//construct new book with name
+	public Book(String name){
+    	this.name = name;
+	}
+	//create and add a new contact
+	public void addContact(String First_Name, String Last_Name, String Address1, String Address2, String City, String State, String Zip, String Number, String Email){
+    	book.add(new Contact( First_Name, Last_Name, Address1, Address2, City, State, Zip, Number, Email));
+	}
+	//add an existing contact
+	public void addExistingContact(Contact contact){
+   	 book.add(contact);
+	}
+	//edit an existing contact
+	//expects all parameters, null arguments use special character "$"
+	public void editContact(Contact contact, String First_Name, String Last_Name, String Address1, String Address2, String City, String State, String Zip, String Number, String Email){
+   	 contact.makeChanges(First_Name, Last_Name, Address1, Address2, City, State, Zip, Number, Email);
+	}
+	//delete an existing contact
+	//this version looks for a matching first and last name of contact to delete
+	public boolean deleteContact(String First_Name, String Last_Name){
+    	for(int i = 0; i != book.size(); i++){
+        	if(First_Name.equalsIgnoreCase(book.get(i).First_Name)){
+            	if(Last_Name.equalsIgnoreCase(book.get(i).Last_Name)){
+                	book.remove(i);
+                	((ArrayList<Contact>)book).trimToSize();
+                	return true;
+            	}
         	}else{
-        		continue;
+            	continue;
         	}
     	}
     	return false;
 	}
-	
+	//print book to console (used for testing)
 	public void printBook(){
-		Contact info; 
-		for(int i = 0; i < book.size(); i++){
-			info = book.get(i);
-			System.out.println(info.First_Name + ", " + info.Last_Name + ", " + info.Address + ", " + info.City + ", " + info.State + ", " + info.Zip + ", " + info.Number + ", " + info.Email);
-			}
+    	Contact info;
+    	for(int i = 0; i < book.size(); i++){
+        	info = book.get(i);
+        	System.out.println(info.First_Name + ", " + info.Last_Name + ", " + info.Address1 + ", " + info.Address2 +"," + info.City + ", " + info.State + ", " + info.Zip + ", " + info.Number + ", " + info.Email);
+        	}
 	}
-
-// Can edit expect all of this information?
-    public void editContact(Contact contact, String First_Name, String Last_Name, String Address, String City,
-            String State, String Zip, String Number, String Email){
-    	
-    	contact.makeChanges(First_Name, Last_Name, Address, City, State, Zip, Number, Email);
-    	
-    }
-
-
-
-    class NameComparator implements Comparator<Contact>{
-           public int compare(Contact a, Contact b){
-               return a.Last_Name.compareTo(b.Last_Name);
-           }
-       }
-       
-    // TODO ties broken by last name
-    class ZipComparator implements Comparator<Contact>{
+	//used to sort book by last name
+	class NameComparator implements Comparator<Contact>{
+       	public int compare(Contact a, Contact b){
+           	return a.Last_Name.compareTo(b.Last_Name);
+       	}
+   	}
+	//used to sort book by zip code
+	class ZipComparator implements Comparator<Contact>{
     	public int compare(Contact a, Contact b){
-    		if(Integer.parseInt(a.Zip) == Integer.parseInt(b.Zip)){
-    			return a.Last_Name.compareTo(b.Last_Name);
-    		}else{
-    			return Integer.parseInt(a.Zip) - Integer.parseInt(b.Zip); 
-            }
-        }
-    }
-
-    public void SortByName(){
-        Collections.sort(book, new NameComparator());
-    }
-
-    public void SortByZip(){
-        Collections.sort(book, new ZipComparator());
-    }
+        	if(Integer.parseInt(a.Zip) == Integer.parseInt(b.Zip)){
+            	return a.Last_Name.compareTo(b.Last_Name);
+        	}else{
+            	return Integer.parseInt(a.Zip) - Integer.parseInt(b.Zip);
+        	}
+    	}
+	}
+	//sort by name helper function
+	public void SortByName(){
+    	Collections.sort(book, new NameComparator());
+	}
+	//sort by zip helper function
+	public void SortByZip(){
+    	Collections.sort(book, new ZipComparator());
+	}
 }
-
-
