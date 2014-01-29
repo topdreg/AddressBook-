@@ -1,40 +1,54 @@
-import java.util.*;
-
+/**
+ *
+ * @author Intergalactic Overlords, University of Oregon, 2014
+ *
+ */
 public class Contact{
 
-// These should probably be private. If we don’t use a public get method then we have to
-// leave them public.
-        public String First_Name, Last_Name, Address, City, State, Email, Zip, Number;
+	public String First_Name, Last_Name, Address1, Address2, City, State, Email, Zip, Number;
 
-// When the Book class adds an entry it will have to provide this information.
-// If it doesn’t have all the information we can use a special character to signify that.
-        public Contact(String First_Name, String Last_Name, String Address, String City, String State, String Zip, String Number, String Email){
+	//Contact construct: expects all parameters, null parameters use special character "$"
+	public Contact(String First_Name, String Last_Name, String Address1, String Address2, String City,
+        	String State, String Zip, String Number, String Email){
     
-                    this.First_Name = First_Name;
-                    this.Last_Name = Last_Name;
-                    this.Address = Address;
-                    this.City = City;
-                    this.State = State;
-                    this.Email = Email;
-                    this.Zip = Zip;
-                    this.Number = Number;
+        	this.First_Name = First_Name;
+        	this.Last_Name = Last_Name;
+        	this.Address1 = Address1;
+        	this.Address2 = Address2;
+        	this.City = City;
+        	this.State = State;
+        	this.Email = Email;
+        	this.Zip = Zip;
+        	this.Number = Number;
 
-        }
+	}
+	//change fields of a contact: expects all parameters, null parameters use special character "$"
+	public void makeChanges(String First_Name, String Last_Name, String Address1, String Address2, String City,
+        	String State, String Zip, String Number, String Email){
 
-// So, I’m imagining that when someone clicks “Save edit” or what have you, all of the
-// strings and ints displayed in the UI are going to be sent to “edit contact” and then here?
-// Essentially this is just overwriting each field then.
+    	if(First_Name != "$"){this.First_Name = First_Name;}
+    	if(Last_Name != "$"){this.Last_Name = Last_Name;}
+    	if(Address1 != "$"){this.Address1 = Address1;}
+    	if(Address2 != "$"){this.Address2 = Address2;}
+    	if(City != "$"){this.City = City;}
+    	if(State != "$"){this.State = State;}
+    	if(Email != "$"){this.Email = Email;}
+    	if(Zip != "$"){this.Zip = Zip;}
+    	if(Number != "$"){this.Number = Number;}
 
-        public void makeChanges(String First_Name, String Last_Name, String Address, String City, String State, String Zip, String Number, String Email){
-
-            if(First_Name != "$"){this.First_Name = First_Name;}
-            if(Last_Name != "$"){this.Last_Name = Last_Name;}
-            if(Address != "$"){this.Address = Address;}
-            if(City != "$"){this.City = City;}
-            if(State != "$"){this.State = State;}
-            if(Email != "$"){this.Email = Email;}
-            if(Zip != "$"){this.Zip = Zip;}
-            if(Number != "$"){this.Number = Number;}
-
-        }
+	}
+	//construct string from contact fields. Skips over null ("$") characters
+	public String toString(){
+    	String toString = "";
+    	if(First_Name != "$"){toString += First_Name + " ";}
+    	if(Last_Name != "$"){toString += Last_Name + ", ";}
+    	if(Address1 != "$"){toString += Address1 + " ";}
+    	if(Address2 != "$"){toString += Address2 + ", ";}
+    	if(City != "$"){toString += City + ", ";}
+    	if(State != "$"){toString += State + " ";}
+    	if(Zip != "$"){toString += Zip + ", ";} 	 
+    	if(Number != "$"){toString += Number + " ";}
+    	if(Email != "$"){toString += Email;}
+    	return toString;
+	}
 }
