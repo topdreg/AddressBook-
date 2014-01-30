@@ -15,14 +15,14 @@ public class EntryGUI extends javax.swing.JFrame {
 	boolean isNew;
     
 	public EntryGUI(Contact contact, boolean isNew){
-   	 this.isNew = isNew;
+    	this.isNew = isNew;
     	this.contact = contact;
     	initComponents();
     	populateFields();
 	}
 
 	public EntryGUI(Contact contact, DefaultListModel listModel, boolean isNew){
-   	 this.isNew = isNew;
+    	this.isNew = isNew;
     	this.contact = contact;
     	initComponents();
     	populateFields();
@@ -38,6 +38,7 @@ public class EntryGUI extends javax.swing.JFrame {
      	if(! contact.State.equals("$")){state.setText(contact.State);}
      	if(! contact.Zip.equals("$")){zip.setText(contact.Zip);}
      	if(! contact.Number.equals("$")){phone.setText(contact.Number);}
+	if(! contact.Email.equals("$")){email.setText(contact.Email);}
  	}
 	/**
  	* This method is called from within the constructor to initialize the form.
@@ -75,9 +76,9 @@ public class EntryGUI extends javax.swing.JFrame {
     	jLabel2.setText("Last Name");
     	jLabel3.setText("Street Address");
     	jLabel4.setText("City");
-    	jLabel5.setText("State");
-    	jLabel6.setText("Zip Code");
-    	jLabel7.setText("Phone Number");
+    	jLabel5.setText("State [xx]");
+    	jLabel6.setText("Zip Code [xxxxx]");
+    	jLabel7.setText("Phone Number [xxxxxxxxxx]");
    	 
 
     	phone.addActionListener(new java.awt.event.ActionListener() {
@@ -227,12 +228,12 @@ private void saveEntryActionPerformed(java.awt.event.ActionEvent evt) {
    	 
    	 
     	//zip must must be NOT NULL and 5 characters [0-9]
-    	if(! ((! zip.getText().equals("")) && (zip.getText().length() == 5) && (zip.getText().matches("[0-9]+")))){
+    	if(! ((! zip.getText().equals("")) && (zip.getText().length() == 5) && (zip.getText().matches("[0-9 ]+")))){
         	zip.setBorder(borderRed);
         	allgood = false;
     	}
     	//phone number must be 10 characters [0-9]
-    	if(! ((phone.getText().length() == 10) && (phone.getText().matches("[0-9]+")))){
+    	if(! ((phone.getText().length() == 10) && (phone.getText().matches("[0-9 ]+")))){
         	phone.setBorder(borderRed);
         	allgood = false;
     	}
@@ -242,22 +243,33 @@ private void saveEntryActionPerformed(java.awt.event.ActionEvent evt) {
         	allgood = false;
     	}
     	//first name must be NOT NULL and [a-z][A-Z]
-    	if(! ((! f_name.getText().equals("")) && (f_name.getText().matches("[a-zA-Z]+")))){
+    	if(! ((! f_name.getText().equals("")) && (f_name.getText().matches("[a-zA-Z ]+")))){
         	f_name.setBorder(borderRed);
         	allgood = false;
     	}
     	//last name must be NOT NULL and [a-z][A-Z]
-    	if(! ((! l_name.getText().equals("")) && (l_name.getText().matches("[a-zA-Z]+")))){
+    	if(! ((! l_name.getText().equals("")) && (l_name.getText().matches("[a-zA-Z ]+")))){
         	l_name.setBorder(borderRed);
         	allgood = false;
     	}
     	//city must be NOT NULL and [a-z][A-Z]
-    	if(! ((! city.getText().equals("")) && (city.getText().matches("[a-zA-Z]+")))){
+    	if(! ((! city.getText().equals("")) && (city.getText().matches("[a-zA-Z ]+")))){
         	city.setBorder(borderRed);
         	allgood = false;
     	}
-    	//state must be NOT NULL and [a-z][A-Z]
-    	if(! ((! state.getText().equals("")) && (state.getText().matches("[a-zA-Z]+")) && (state.getText().length() == 2))){
+    	//if state is greater than 2 in length, the 3rd+ characters must be white space
+    	if(state.getText().length() >= 2){
+   		 int l = state.getText().length();
+   		 for(int i = 2; i < l; i++){
+   			 if(! (state.getText().charAt(i) == ' ')){
+   				 state.setBorder(borderRed);
+   				 allgood = false;
+   				 continue;
+   			 }
+   		 }
+    	}
+  	//state must be NOT NULL and [a-z][A-Z]
+    	else if(! ((! state.getText().equals("")) && (state.getText().matches("[a-zA-Z ]+")) && (state.getText().length() == 2))){
         	state.setBorder(borderRed);
         	allgood = false;
     	}
@@ -265,17 +277,18 @@ private void saveEntryActionPerformed(java.awt.event.ActionEvent evt) {
         	address1.setBorder(borderRed);
     	}
     	if(allgood){
-        	if(f_name.getText().equals("")){contact.First_Name = "$";}else{contact.First_Name = f_name.getText();}
-        	if(l_name.getText().equals("")){contact.Last_Name = "$";}else{contact.Last_Name = l_name.getText();}
+   		 
+        	if(f_name.getText().equals("")){contact.First_Name = "$";}else{contact.First_Name = f_name.getText().trim();}
+        	if(l_name.getText().equals("")){contact.Last_Name = "$";}else{contact.Last_Name = l_name.getText().trim();}
         	if(address1.getText().equals("")){contact.Address1 = "$";}else{contact.Address1 = address1.getText();}
         	if(address2.getText().equals("")){contact.Address2 = "$";}else{contact.Address2 = address2.getText();}
-        	if(city.getText().equals("")){contact.City = "$";}else{contact.City = city.getText();}
-        	if(state.getText().equals("")){contact.State = "$";}else{contact.State = state.getText();}
-        	if(zip.getText().equals("")){contact.Zip = "$";}else{contact.Zip = zip.getText();}
-        	if(phone.getText().equals("")){contact.Number = "$";}else{contact.Number = phone.getText();}
-        	if(email.getText().equals("")){contact.Email = "$";}else{contact.Email = email.getText();}
+        	if(city.getText().equals("")){contact.City = "$";}else{contact.City = city.getText().trim();}
+        	if(state.getText().equals("")){contact.State = "$";}else{contact.State = state.getText().trim();}
+        	if(zip.getText().equals("")){contact.Zip = "$";}else{contact.Zip = zip.getText().trim();}
+        	if(phone.getText().equals("")){contact.Number = "$";}else{contact.Number = phone.getText().trim();}
+        	if(email.getText().equals("")){contact.Email = "$";}else{contact.Email = email.getText().trim();}
         	if(!isNew){
-       		 listModel.addElement(contact);
+            	listModel.addElement(contact);
         	}
         	this.dispose();
     	}
@@ -339,7 +352,3 @@ private void saveEntryActionPerformed(java.awt.event.ActionEvent evt) {
 	private javax.swing.JTextField zip;
 	// End of variables declaration//GEN-END:variables
 }
-
-
-
-
