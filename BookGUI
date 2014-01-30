@@ -257,25 +257,42 @@ public class BookGUI extends javax.swing.JFrame implements ItemListener{
     	e.setVisible(true);
 	}//GEN-LAST:event_addActionPerformed
     
-	private void deleteActionPerformed(java.awt.event.ActionEvent evt, JList contacts, DefaultListModel listModel){//GEN-FIRST:event_deleteActionPerformed
+	private void deleteActionPerformed(java.awt.event.ActionEvent evt, JList contacts, DefaultListModel<Contact> listModel){//GEN-FIRST:event_deleteActionPerformed
     	int selected = contacts.getSelectedIndex();
     	if(selected == -1){
        	 
     	}else{
-   		 book.book.remove(selected);
+        	book.book.remove(selected);
         	listModel.remove(selected);
     	}
 	}//GEN_LAST:event_deleteActionPerformed
 
-	private void mailingLabelActionPerformed(java.awt.event.ActionEvent evt, JList contacts, DefaultListModel listModel){
+	private void mailingLabelActionPerformed(java.awt.event.ActionEvent evt, JList contacts, DefaultListModel<Contact> listModel){
     	int selected = contacts.getSelectedIndex();
     	if(selected == -1){
         	//Message to select a contact?
     	}else{
         	Contact contact = book.book.get(selected);
-        	String firstLine = contact.First_Name + " " + contact.Last_Name + "\n";
-        	String secondLine = contact.Address1 + " " + contact.Address2 + "\n";
-        	String thirdLine = contact.City + ", " + contact.State + " " + contact.Zip;
+       	 
+        	String first= "";
+        	String last = "";
+        	String address1 = "";
+        	String address2 = "";
+        	String citay = "";
+        	String state = "";
+        	String zip = "";
+       	 
+        	if(! contact.First_Name.equals("$")){first = contact.First_Name;}
+        	if(! contact.Last_Name.equals("$")){last = contact.Last_Name;}
+        	if(! contact.Address1.equals("$")){address1 = contact.Address1;}
+        	if(! contact.Address2.equals("$")){address2 = contact.Address2;}
+        	if(! contact.City.equals("$")){citay = contact.City;}
+        	if(! contact.State.equals("$")){state = contact.State;}
+        	if(! contact.Zip.equals("$")){zip = contact.Zip;}
+       	 
+        	String firstLine = first + " " + last + "\n";
+        	String secondLine = address1 + " " + address2 + "\n";
+        	String thirdLine = citay + ", " + state + " " + zip;
         	String label = firstLine + secondLine + thirdLine;
         	JOptionPane.showMessageDialog(null, label);
     	}
@@ -440,6 +457,7 @@ public class BookGUI extends javax.swing.JFrame implements ItemListener{
 	private javax.swing.JCheckBox sortName;
 	private javax.swing.JCheckBox sortZip;
 	// End of variables declaration//GEN-END:variables
-} 
+}
+
 
 
